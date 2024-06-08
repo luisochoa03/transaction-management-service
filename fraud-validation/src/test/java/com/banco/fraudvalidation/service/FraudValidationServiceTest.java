@@ -1,20 +1,23 @@
 package com.banco.fraudvalidation.service;
 
-import com.banco.fraudvalidation.model.Transaction;
+import com.banco.commonmodels.dto.TransactionKafkaDTO;
 import com.banco.fraudvalidation.service.valitationfraudstrategy.ValueValidationStrategy;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@ExtendWith(MockitoExtension.class)
 class FraudValidationServiceTest {
 
     private final ValueValidationStrategy strategy = new ValueValidationStrategy();
 
     @Test
     void validate_shouldReturnTrue_whenValueIsLessThanMax() {
-        Transaction transaction = new Transaction();
+        TransactionKafkaDTO transaction = new TransactionKafkaDTO();
         transaction.setValue(new BigDecimal("500"));
 
         boolean result = strategy.validate(transaction);
@@ -24,7 +27,7 @@ class FraudValidationServiceTest {
 
     @Test
     void validate_shouldReturnFalse_whenValueIsGreaterThanMax() {
-        Transaction transaction = new Transaction();
+        TransactionKafkaDTO transaction = new TransactionKafkaDTO();
         transaction.setValue(new BigDecimal("1500"));
 
         boolean result = strategy.validate(transaction);

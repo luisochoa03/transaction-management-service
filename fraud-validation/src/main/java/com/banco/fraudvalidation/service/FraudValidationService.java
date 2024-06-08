@@ -1,13 +1,15 @@
 package com.banco.fraudvalidation.service;
 
-import com.banco.fraudvalidation.model.Transaction;
-import com.banco.fraudvalidation.model.TransactionStatus;
+
+import com.banco.commonmodels.dto.TransactionKafkaDTO;
+import com.banco.commonmodels.dto.TransactionStatus;
 import com.banco.fraudvalidation.producer.TransactionProducer;
 import com.banco.fraudvalidation.service.approvalstrategy.ApprovalStrategy;
 import com.banco.fraudvalidation.service.approvalstrategy.OptionalValidationApprovalStrategy;
 import com.banco.fraudvalidation.service.approvalstrategy.RequiredValidationApprovalStrategy;
 import com.banco.fraudvalidation.service.valitationfraudstrategy.ValidationStrategy;
 import com.banco.fraudvalidation.service.valitationfraudstrategy.ValueValidationStrategy;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class FraudValidationService {
     private final List<ApprovalStrategy> approvalStrategies;
     private final TransactionProducer transactionProducer;
 
+
     public FraudValidationService(TransactionProducer transactionProducer) {
         this.validationStrategies = new ArrayList<>();
         this.validationStrategies.add(new ValueValidationStrategy());
@@ -29,9 +32,11 @@ public class FraudValidationService {
         this.approvalStrategies.add(new RequiredValidationApprovalStrategy());
         this.approvalStrategies.add(new OptionalValidationApprovalStrategy(validationStrategies));
         this.transactionProducer = transactionProducer;
+
     }
 
-    public void validateAndPublish(Transaction transaction) {
+    public void validateAndPublish(TransactionKafkaDTO transaction) {
+
         Map<ValidationStrategy, Boolean> validationResults = validateTransaction(transaction);
         boolean isValid = approvalStrategies.stream()
                 .allMatch(strategy -> strategy.approve(validationResults));
@@ -40,7 +45,7 @@ public class FraudValidationService {
         transactionProducer.publish(transaction);
     }
 
-    private Map<ValidationStrategy, Boolean> validateTransaction(Transaction transaction) {
+    private Map<ValidationStrategy, Boolean> validateTransaction(TransactionKafkaDTO transaction) {
         Map<ValidationStrategy, Boolean> validationResults = new HashMap<>();
 
         for (ValidationStrategy strategy : validationStrategies) {
@@ -52,7 +57,7 @@ public class FraudValidationService {
     }
 
 
-    private void updateTransactionStatus(Transaction transaction, boolean isValid) {
+    private void updateTransactionStatus(TransactionKafkaDTO transaction, boolean isValid) {
         TransactionStatus status = isValid ? TransactionStatus.APPROVED : TransactionStatus.REJECTED;
         transaction.setTransactionStatus(status);
     }

@@ -1,17 +1,21 @@
-package com.banco.fraudvalidation.model;
+package com.banco.commonmodels.dto;
+
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-public class Transaction {
+public class TransactionKafkaDTO {
 
     private UUID accountExternalIdDebit;
     private UUID accountExternalIdCredit;
     private int transferTypeId;
     private BigDecimal value;
+    @JsonProperty("transactionExternalId")
     private UUID transactionExternalId;
     private LocalDateTime createdAt;
+    @JsonProperty("transactionStatus")
     private TransactionStatus transactionStatus;
 
     public UUID getAccountExternalIdDebit() {

@@ -1,8 +1,8 @@
 package com.banco.fraudvalidation.service.valitationfraudstrategy;
 
-import com.banco.fraudvalidation.model.Transaction;
+import com.banco.commonmodels.dto.TransactionKafkaDTO;
 
 public interface ValidationStrategy {
-    boolean validate(Transaction transaction);
+    boolean validate(TransactionKafkaDTO transaction);
     boolean isRequired();
 }

@@ -1,6 +1,6 @@
 package com.banco.fraudvalidation.consumer;
 
-import com.banco.fraudvalidation.model.Transaction;
+import com.banco.commonmodels.dto.TransactionKafkaDTO;
 import com.banco.fraudvalidation.service.FraudValidationService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class TransactionConsumer {
 
 
     @KafkaListener(topics = "transactions", groupId ="validate")
-    public void consume(Transaction transaction) {
+    public void consume(TransactionKafkaDTO transaction)  {
         fraudValidationService.validateAndPublish(transaction);
     }
 
