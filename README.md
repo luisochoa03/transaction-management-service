@@ -1,5 +1,5 @@
 # transaction-management-service
-
+![img.png](diagrama.png)
 # Guía de Configuración del Servicio de Gestión de Transacciones
 
 Este repositorio contiene un sistema integral de gestión de transacciones. El sistema puede crear transacciones, validarlas a través de un servicio de detección de fraude y las disponibiliza para ser consultadas.
@@ -106,4 +106,4 @@ docker build -t transaction-updater ./transaction-updater
 docker-compose -f docker-compose-apps.yml up -d
 ```
 
-Con estos pasos, deberías tener en funcionamiento el servicio de gestión de transacciones.
+Con estos pasos, tendras en funcionamiento el servicio de gestión de transacciones.
