@@ -1,0 +1,11 @@
+# Ignora los directorios target
+**/target/
+
+# Ignora los archivos .iml
+*.iml
+
+# Ignora los archivos de informes de pruebas
+**/target/surefire-reports/
+
+# Ignora los archivos de propiedades de la aplicación
+**/target/classes/application.properties

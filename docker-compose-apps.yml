@@ -1,0 +1,100 @@
+version: '3.7'
+services:
+  fraud-response-indexing:
+    image: fraud-response-indexing
+    external_links:
+      - kafka
+      - elasticsearch
+    environment:
+      SERVER_PORT: 7077
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_INDEX: transactions
+    ports:
+      - 7077:7077
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512m
+
+  fraud-validation:
+    image: fraud-validation
+    external_links:
+      - kafka
+    environment:
+      SERVER_PORT: 9099
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - 9099:9099
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512m
+
+  transaction-creation:
+    image: transaction-creation
+    external_links:
+      - kafka
+      - cassandra
+    environment:
+      SERVER_PORT: 5055
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      CASSANDRA_LOCAL_DATACENTER: dc1
+      CASSANDRA_KEYSPACE_NAME: test
+      CASSANDRA_CONTACT_POINTS: cassandra
+      CASSANDRA_PORT: 9042
+    ports:
+      - 5055:5055
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512m
+
+  transaction-listing:
+    image: transaction-listing
+    external_links:
+      - kafka
+      - cassandra
+      - elasticsearch
+    environment:
+      SERVER_PORT: 6066
+      CASSANDRA_LOCAL_DATACENTER: dc1
+      CASSANDRA_KEYSPACE_NAME: test
+      CASSANDRA_CONTACT_POINTS: cassandra
+      CASSANDRA_PORT: 9042
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_INDEX: transactions
+    ports:
+      - 6066:6066
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512m
+
+  transaction-updater:
+    image: transaction-updater
+    external_links:
+      - kafka
+      - cassandra
+      - elasticsearch
+    environment:
+      SERVER_PORT: 4044
+      CASSANDRA_LOCAL_DATACENTER: dc1
+      CASSANDRA_KEYSPACE_NAME: test
+      CASSANDRA_CONTACT_POINTS: cassandra
+      CASSANDRA_PORT: 9042
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+    ports:
+      - 4044:4044
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512m
