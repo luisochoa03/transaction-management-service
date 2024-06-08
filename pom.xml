@@ -12,6 +12,8 @@
         <module>fraud-validation</module>
         <module>fraud-response-indexing</module>
         <module>transaction-listing</module>
+        <module>transaction-updater</module>
+        <module>common-models</module>
     </modules>
 
     <properties>
